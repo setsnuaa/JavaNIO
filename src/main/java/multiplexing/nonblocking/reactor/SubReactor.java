@@ -56,9 +56,13 @@ public class SubReactor implements Closeable, Runnable {
                     this.dispatch(iterator.next());
                     iterator.remove();
                 }
+                //睡3s钟是为了防止register()之前selector阻塞在select()方法处
+                Thread.sleep(3000);
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 

@@ -31,7 +31,7 @@ public class Handler implements Runnable {
             POOL.submit(() -> {
                 try {
                     System.out.println("收到客户端数据：" + new String(buffer.array(), 0, buffer.remaining()));
-                    Thread.sleep(1000);
+                    Thread.sleep(10000);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

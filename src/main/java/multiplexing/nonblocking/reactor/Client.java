@@ -1,7 +1,5 @@
 package multiplexing.nonblocking.reactor;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -16,7 +14,7 @@ import java.util.Scanner;
  */
 public class Client {
     public static void main(String[] args) {
-        try (SocketChannel channel = SocketChannel.open(new InetSocketAddress("localhost", 8080))) {
+        try(SocketChannel channel = SocketChannel.open(new InetSocketAddress("localhost", 8080))){
             Scanner sc = new Scanner(System.in);
             System.out.println("已连接服务器");
             while (true) {
@@ -26,7 +24,7 @@ public class Client {
                 //向通道写数据
                 channel.write(ByteBuffer.wrap(line.getBytes()));
             }
-        } catch (IOException e) {
+        }catch (IOException e){
             e.printStackTrace();
         }
     }
