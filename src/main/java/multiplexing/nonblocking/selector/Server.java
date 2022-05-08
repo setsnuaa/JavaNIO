@@ -1,4 +1,4 @@
-package multiplexing.nonblocking;
+package multiplexing.nonblocking.selector;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

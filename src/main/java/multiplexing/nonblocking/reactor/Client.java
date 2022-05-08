@@ -1,4 +1,6 @@
-package multiplexing.nonblocking;
+package multiplexing.nonblocking.reactor;
+
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -9,7 +11,7 @@ import java.util.Scanner;
 /**
  * @name:
  * @author:pan.gefei
- * @date:2022/5/7 12:42
+ * @date:2022/5/8 15:22
  * @description:
  */
 public class Client {
@@ -23,15 +25,9 @@ public class Client {
 
                 //向通道写数据
                 channel.write(ByteBuffer.wrap(line.getBytes()));
-
-                ByteBuffer buffer = ByteBuffer.allocate(128);
-                //如果另一端不发送数据，会卡在read这里，所以是阻塞的
-                channel.read(buffer);
-                buffer.flip();
-                System.out.println("收到服务器数据：" + new String(buffer.array(), 0, buffer.remaining()));
             }
         } catch (IOException e) {
-            throw new RuntimeException();
+            e.printStackTrace();
         }
     }
 }
