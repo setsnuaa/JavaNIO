@@ -24,16 +24,6 @@ public class Reactor implements Closeable, Runnable {
         selector = Selector.open();
     }
 
-    private void dispatch(SelectionKey key) {
-        //之前注册的时候事件和事件对应的处理对象绑定在一起
-        //用attachment()方法获得处理事件的对象
-        Object att = key.attachment();
-        if (att instanceof Runnable) {
-            ((Runnable) att).run();
-            System.out.println("Acceptor done");
-        }
-    }
-
     @Override
     public void close() throws IOException {
         serverSocketChannel.close();
@@ -60,6 +50,16 @@ public class Reactor implements Closeable, Runnable {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void dispatch(SelectionKey key) {
+        //之前注册的时候事件和事件对应的处理对象绑定在一起
+        //用attachment()方法获得处理事件的对象
+        Object att = key.attachment();
+        if (att instanceof Runnable) {
+            ((Runnable) att).run();
+            System.out.println("Acceptor done");
         }
     }
 }
