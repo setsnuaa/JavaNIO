@@ -46,7 +46,11 @@ public class Server {
                     } else if (key.isReadable()) {
                         SocketChannel channel = (SocketChannel) key.channel();
                         ByteBuffer buffer = ByteBuffer.allocate(128);
-                        channel.read(buffer);
+                        if (channel.read(buffer) < 0) {
+                            System.out.println("客户端断开连接，IP地址为：" + channel.getRemoteAddress());
+                            channel.close();
+                            continue;
+                        }
                         buffer.flip();
                         System.out.println("接收到客户端数据：" + new String(buffer.array(), 0, buffer.remaining()));
 
