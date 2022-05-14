@@ -1,4 +1,4 @@
-package netty;
+package netty.buffer;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
