@@ -3,10 +3,7 @@ package netty;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.ChannelInitializer;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -21,11 +18,12 @@ import java.util.Scanner;
  * @description:
  */
 public class Client {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+        NioEventLoopGroup eventLoopGroup = new NioEventLoopGroup();
         Bootstrap bootstrap = new Bootstrap();
         //配置客户端
         bootstrap
-                .group(new NioEventLoopGroup())
+                .group(eventLoopGroup)
                 .channel(NioSocketChannel.class)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
@@ -51,8 +49,17 @@ public class Client {
                 System.out.println(Thread.currentThread().getName() + ">>请输入要发送给服务端的内容：");
                 String line = scanner.nextLine();
                 if (line.isEmpty()) continue;
+                if (line.equals("exit")) {
+                    ChannelFuture future = channel.close();
+                    //close操作是异步的，主线程需要等close完全关闭再执行后续语句
+                    future.sync();
+                    break;
+                }
                 channel.writeAndFlush(Unpooled.wrappedBuffer(line.getBytes()));
             }
+        } finally {
+            eventLoopGroup.shutdownGracefully().sync();
+            System.out.println("sa yo ra ra");
         }
     }
 }
