@@ -46,7 +46,7 @@ public class Client {
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
                 //这条消息是main发的
-                System.out.println(Thread.currentThread().getName() + ">>请输入要发送给服务端的内容：");
+                System.out.println(Thread.currentThread().getName() + "<<请输入要发送给服务端的内容：");
                 String line = scanner.nextLine();
                 if (line.isEmpty()) continue;
                 if (line.equals("exit")) {
