@@ -10,6 +10,10 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 import netty.channel.ChannelHandlerTest;
 
 import java.nio.charset.StandardCharsets;
@@ -36,7 +40,17 @@ public class Server {
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         //获取流水线，处理客户端数据时，实际上是像流水线一样在处理
                         //这个流水线上可以有很多Handler
-                        socketChannel.pipeline().addLast(new ChannelHandlerTest());
+                        socketChannel.pipeline()
+                                .addLast(new StringDecoder())
+                                .addLast(new LoggingHandler(LogLevel.INFO))
+                                .addLast(new ChannelInboundHandlerAdapter() {
+                                    @Override
+                                    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+                                        System.out.println("收到客户端消息：" + msg);
+                                        ctx.channel().writeAndFlush("已收到");
+                                    }
+                                })
+                                .addLast(new StringEncoder());
                     }
                 });
 
